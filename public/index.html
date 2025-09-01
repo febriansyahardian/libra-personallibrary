@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Libra - Your Personal Library</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gradient-to-br from-cream-50 via-sage-50 to-mist-50 min-h-screen">
+    <!-- Header -->
+    <header class="relative z-10">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2 sm:space-x-3">
+                    <div class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-sage-500 to-sage-600 rounded-2xl flex items-center justify-center shadow-soft">
+                        <i class="fas fa-book-open text-white text-sm sm:text-lg"></i>
+                    </div>
+                    <h1 class="text-xl sm:text-2xl font-semibold text-mist-800">Libra</h1>
+                </div>
+                <button id="addBookBtn" class="btn-primary flex items-center space-x-1 sm:space-x-2 text-sm sm:text-base">
+                    <i class="fas fa-plus text-sm sm:text-base"></i>
+                    <span class="hidden sm:inline">Add Book</span>
+                    <span class="sm:hidden">Add</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Search Section -->
+    <section class="relative z-10 mb-8">
+        <div class="container mx-auto px-4">
+            <div class="search-bar">
+                <div class="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-mist-400">
+                    <i class="fas fa-search text-sm sm:text-base"></i>
+                </div>
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    class="search-input" 
+                    placeholder="Search your library..."
+                >
+            </div>
+        </div>
+    </section>
+
+    <!-- Filter Section -->
+    <section class="relative z-10 mb-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap gap-3 justify-center">
+                <button class="filter-button filter-active" data-filter="all">
+                    All Books
+                </button>
+                <select id="genreFilter" class="filter-button filter-inactive">
+                    <option value="all">All Genres</option>
+                    <option value="Fiction">Novel Fiction</option>
+                    <option value="Non-Fiction">Non-Fiction</option>
+                    <option value="Self-Help">Self-Help</option>
+                    <option value="Science Fiction">Science Fiction</option>
+                    <option value="Productivity">Productivity</option>
+                    <option value="General">General</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="relative z-10 pb-20">
+        <div class="container mx-auto px-4">
+            <!-- To Read Section -->
+            <section class="mb-12">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-lg sm:text-xl font-semibold text-mist-800 flex items-center space-x-2">
+                        <i class="fas fa-bookmark text-warm-500 text-sm sm:text-base"></i>
+                        <span>To Read</span>
+                        <span id="toReadCount" class="bg-warm-100 text-warm-700 px-2 py-1 rounded-full text-xs sm:text-sm font-medium">0</span>
+                    </h2>
+                </div>
+                <div id="toReadGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <!-- Books will be populated here -->
+                </div>
+            </section>
+
+            <!-- Ongoing Read Section -->
+            <section class="mb-12">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-lg sm:text-xl font-semibold text-mist-800 flex items-center space-x-2">
+                        <i class="fas fa-book-open text-blue-500 text-sm sm:text-base"></i>
+                        <span>Ongoing Read</span>
+                        <span id="ongoingCount" class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs sm:text-sm font-medium">0</span>
+                    </h2>
+                </div>
+                <div id="ongoingGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <!-- Books will be populated here -->
+                </div>
+            </section>
+
+
+
+            <!-- Read Section -->
+            <section class="mb-12">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-lg sm:text-xl font-semibold text-mist-800 flex items-center space-x-2">
+                        <i class="fas fa-check-circle text-sage-500 text-sm sm:text-base"></i>
+                        <span>Already Read</span>
+                        <span id="readCount" class="bg-sage-100 text-sage-700 px-2 py-1 rounded-full text-xs sm:text-sm font-medium">0</span>
+                    </h2>
+                </div>
+                <div id="readGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <!-- Books will be populated here -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Add Book Modal -->
+    <div id="addBookModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="glass-card w-full max-w-sm sm:max-w-md p-6 sm:p-8 animate-scale-in mx-4">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg sm:text-xl font-semibold text-mist-800">Add New Book</h3>
+                    <button id="closeModal" class="text-mist-400 hover:text-mist-600 transition-colors p-2">
+                        <i class="fas fa-times text-lg sm:text-xl"></i>
+                    </button>
+                </div>
+                
+                <form id="addBookForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-mist-700 mb-2">Title</label>
+                        <input type="text" id="bookTitle" class="input-field text-sm sm:text-base" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-mist-700 mb-2">Author</label>
+                        <input type="text" id="bookAuthor" class="input-field text-sm sm:text-base" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-mist-700 mb-2">Genre</label>
+                        <select id="bookGenre" class="input-field text-sm sm:text-base">
+                            <option value="Fiction">Fiction</option>
+                            <option value="Non-Fiction">Non-Fiction</option>
+                            <option value="Self-Help">Self-Help</option>
+                            <option value="Science Fiction">Science Fiction</option>
+                            <option value="Productivity">Productivity</option>
+                            <option value="General">General</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-mist-700 mb-2">Book Cover (optional)</label>
+                        <div class="space-y-3">
+                            <!-- File Upload Option -->
+                            <div>
+                                <div class="relative">
+                                    <input type="file" id="bookCoverFile" accept="image/*" class="hidden" onchange="libra.handleImageUpload(event)">
+                                    <button type="button" onclick="document.getElementById('bookCoverFile').click()" class="file-upload-btn">
+                                        <i class="fas fa-upload text-mist-400"></i>
+                                        <span>Choose Image File</span>
+                                    </button>
+                                </div>
+                                <label class="block text-sm font-medium text-mist-600 p-2 text-center">Or</label>
+
+                                <div id="imagePreview" class="hidden image-preview-container">
+                                    <img id="previewImg" alt="Preview">
+                                    <button type="button" onclick="libra.removeImagePreview()" class="remove-image-btn">
+                                        <i class="fas fa-times"></i> Remove
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- URL Option -->
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <span class="text-mist-400 text-sm">OR</span>
+                                </div>
+                                <input type="url" id="bookCover" class="input-field text-sm sm:text-base pl-12" placeholder="https://example.com/cover.jpg">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-mist-700 mb-2">Description (optional)</label>
+                        <textarea id="bookDescription" class="input-field h-20 sm:h-24 resize-none text-sm sm:text-base" placeholder="Enter a brief description of the book..."></textarea>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row gap-3 pt-4">
+                        <button type="button" id="cancelAdd" class="btn-secondary text-sm sm:text-base">Cancel</button>
+                        <button type="submit" class="btn-primary text-sm sm:text-base">Add Book</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Book Details Modal -->
+    <div id="bookDetailsModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="glass-card w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl max-h-[85vh] overflow-y-auto animate-scale-in mx-4">
+                <div class="flex items-center justify-between mb-6 p-6 pb-4">
+                    <h3 class="text-lg sm:text-xl font-semibold text-mist-800">Book Details</h3>
+                    <button id="closeDetailsModal" class="text-mist-400 hover:text-mist-600 transition-colors p-2">
+                        <i class="fas fa-times text-lg sm:text-xl"></i>
+                    </button>
+                </div>
+                
+                <div id="bookDetailsContent" class="px-6 pb-6">
+                    <!-- Book details will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="successToast" class="fixed bottom-6 right-6 bg-sage-500 text-white px-6 py-4 rounded-2xl shadow-gentle transform translate-y-full transition-transform duration-300 z-50 hidden">
+        <span id="toastMessage">Success!</span>
+    </div>
+
+    <!-- Background Decoration -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden">
+        <div class="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-sage-200/30 to-transparent rounded-full blur-3xl"></div>
+        <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-warm-200/30 to-transparent rounded-full blur-3xl"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

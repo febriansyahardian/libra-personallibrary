@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "title": "The Midnight Library",
+    "author": "Matt Haig",
+    "cover": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&h=600&fit=crop",
+    "status": "ongoing",
+    "genre": "Fiction",
+    "addedDate": "2024-01-15",
+    "description": "Between life and death there is a library, and within that library, the shelves go on forever. Every book provides a chance to try another life you could have lived. To see how things would be if you had made other choices... Would you have done anything different, if you had the chance to undo your regrets? A dazzling novel about all the choices that go into a life well lived."
+  },
+  {
+    "id": 2,
+    "title": "Atomic Habits",
+    "author": "James Clear",
+    "cover": "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=400&h=600&fit=crop",
+    "status": "to-read",
+    "genre": "Self-Help",
+    "addedDate": "2024-01-10",
+    "description": "No matter your goals, Atomic Habits offers a proven framework for improving every day. James Clear, one of the world's leading experts on habit formation, reveals practical strategies that will teach you exactly how to form good habits, break bad ones, and master the tiny behaviors that lead to remarkable results."
+  },
+  {
+    "id": 3,
+    "title": "The Seven Husbands of Evelyn Hugo",
+    "author": "Taylor Jenkins Reid",
+    "cover": "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=400&h=600&fit=crop",
+    "status": "read",
+    "genre": "Fiction",
+    "addedDate": "2024-01-20",
+    "description": "Aging and reclusive Hollywood movie icon Evelyn Hugo is finally ready to tell the truth about her glamorous and scandalous life. But when she chooses unknown magazine reporter Monique Grant for the job, no one is more astounded than Monique herself. Why her? Why now? Monique is not exactly on top of the world. Her husband has left her, and her professional life is going nowhere."
+  },
+  {
+    "id": 4,
+    "title": "Deep Work",
+    "author": "Cal Newport",
+    "cover": "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=600&fit=crop",
+    "status": "to-read",
+    "genre": "Productivity",
+    "addedDate": "2024-01-05",
+    "description": "Deep work is the ability to focus without distraction on a cognitively demanding task. It's a skill that allows you to quickly master complicated information and produce better results in less time. Deep work will make you better at what you do and provide the sense of true fulfillment that comes from craftsmanship."
+  },
+  {
+    "id": 5,
+    "title": "Project Hail Mary",
+    "author": "Andy Weir",
+    "cover": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop",
+    "status": "read",
+    "genre": "Science Fiction",
+    "addedDate": "2024-01-25",
+    "description": "Ryland Grace is the sole survivor on a desperate, last-chance mission—and if he fails, humanity and the Earth itself will perish. Except that right now, he doesn't know that. He can't even remember his own name, let alone the nature of his assignment or how to complete it. All he knows is that he's been asleep for a very, very long time. And he's just been awakened to find himself millions of miles from home, with nothing but two corpses for company."
+  },
+  {
+    "id": 1756582576801,
+    "title": "Funiculi Funicula (Kōhī Ga Samenai Uchi Ni---Before the Coffee Gets Cold)",
+    "author": "Toshikazu Kawaguchi",
+    "cover": "https://image.gramedia.net/rs:fit:0:0/plain/https://cdn.gramedia.com/uploads/items/9786020651927_Funiculi_Funicula_cov.jpg",
+    "status": "ongoing",
+    "genre": "Fiction",
+    "description": "Funiculi Funicula adalah buku pertama dari serial Before The Coffee Gets Cold karya Toshikazu Kawaguchi. Berlatarkan Kafe tua kecil di Tokyo, seri pertama buku ini menawarkan kisah-kisah yang menghangatkan hati dari tokoh-tokoh di dalam buku.\n\nSinopsis Buku\n\nKafe tua yang berada di gang kecil Tokyo terletak di bawah gedung lain, tidak butuh pendingin untuk mendinginkan Kafe tersebut. Tidak begitu ramai, namun terkenal karena bisa membawa pengunjungnya menjelajahi waktu. Keajaiban kafe itu menarik seorang wanita yang ingin memutar waktu untuk berbaikan dengan kekasihnya, seorang perawat yang ingin membaca surat yang tak sempat diberikan suaminya yang sakit, seorang kakak yang ingin menemui adiknya untuk terakhir kali, dan seorang ibu yang ingin bertemu dengan anak yang mungkin takkan pernah dikenalnya. Namun ada banyak peraturan yang harus diingat. Satu, mereka harus tetap duduk di kursi yang telah ditentukan. Dua, apapun yang mereka lakukan di masa yang didatangi takkan mengubah kenyataan di masa kini. Tiga, mereka harus menghabiskan kopi khusus yang disajikan sebelum kopi itu dingin. Rentetan peraturan lainnya tak menghentikan orang-orang itu untuk menjelajahi waktu. Akan tetapi, jika kepergian mereka tak mengubah satu hal pun di masa kini, layakkah semua itu dijalani?\n\nInformasi Lain:\n- Format: Soft Cover\n- Tebal: 224 Halaman\n- ISBN: 9786020651927\n- Tanggal rilis: April 2021",
+    "addedDate": "2025-08-30"
+  },
+  {
+    "id": 1756583026608,
+    "title": "Funiculi Funicula 2: Kisah-Kisah Yang Baru Terungkap",
+    "author": "Toshikazu Kawaguchi",
+    "cover": "https://image.gramedia.net/rs:fit:0:0/plain/https://cdn.gramedia.com/uploads/items/Funiculi_Funicula_2_cov.jpg",
+    "status": "read",
+    "genre": "Fiction",
+    "description": "Funiculi Funicula, sebuah kafe di gang sempit di Tokyo, masih kerap didatangi oleh orang-orang yang ingin menjelajah waktu. Peraturan-peraturan yang merepotkan masih berlaku, tetapi itu semua tidak menyurutkan harapan mereka untuk memutar waktu. Kali ini ada seorang pria yang ingin kembali ke masa lalu untuk menemui sahabat yang putrinya ia besarkan, seorang putra putus asa yang tidak menghadiri pemakaman ibunya, seorang pria sekarat yang ingin melompat kedua tahun kemudian untuk memastikan kekasihnya bahagia, dan seorang detektif yang ingin memberi istrinya hadiah ulang tahun untuk pertama sekaligus terakhir kalinya. Kenyataan memang akan tetap sama. Namun dalam singkatnya durasi sampai kopi mendingin, mungkin masih tersisa waktu bagi mereka untuk menghapus penyesalan, membebaskan diri dari rasa bersalah atau mungkin melihat terwujudnya harapan.\nDi Buku Funiculi Funicula 2: Kisah-Kisah Yang Baru Terungkap ini, kita akan menikmati kisah-kisah berbeda dari buku sebelumnya. Ada 4 judul utama yang masing-masing judul memiliki cerita berbeda, kisah yang diangkat yaitu tentang:\nSahabat\nIbu dan Putra\nKekasih\nSuami dan Istrinya\nSelamat Membaca!",
+    "addedDate": "2025-08-30"
+  }
+]

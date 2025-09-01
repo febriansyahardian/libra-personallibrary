@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  
+  body {
+    @apply bg-cream-50 text-mist-800;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-sage-500 hover:bg-sage-600 text-white font-medium px-4 sm:px-6 py-2 sm:py-3 rounded-2xl transition-all duration-300 ease-out shadow-soft hover:shadow-gentle transform hover:scale-105 active:scale-95;
+  }
+  
+  .btn-secondary {
+    @apply bg-cream-200 hover:bg-cream-300 text-mist-700 font-medium px-4 sm:px-6 py-2 sm:py-3 rounded-2xl transition-all duration-300 ease-out shadow-soft hover:shadow-gentle transform hover:scale-105 active:scale-95;
+  }
+  
+  .card {
+    @apply bg-white rounded-2xl shadow-soft hover:shadow-gentle transition-all duration-300 ease-out border border-cream-200;
+  }
+  
+  .glass-card {
+    @apply bg-white/80 backdrop-blur-sm rounded-2xl shadow-glass border border-white/20;
+  }
+  
+  .input-field {
+    @apply w-full px-3 sm:px-4 py-2 sm:py-3 rounded-2xl border border-cream-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-sage-300 focus:border-transparent transition-all duration-300;
+  }
+  
+  .search-bar {
+    @apply relative w-full max-w-md mx-auto;
+  }
+  
+  .search-input {
+    @apply w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-4 rounded-2xl border border-cream-300 bg-white/90 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-sage-300 focus:border-transparent transition-all duration-300 shadow-soft text-sm sm:text-base;
+  }
+  
+  .book-card {
+    @apply card p-6 hover:transform hover:scale-105 transition-all duration-300 ease-out cursor-pointer;
+  }
+  
+  .status-badge {
+    @apply inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs font-medium;
+  }
+  
+  .status-to-read {
+    @apply bg-warm-100 text-warm-700;
+  }
+  
+  .status-read {
+    @apply bg-sage-100 text-sage-700;
+  }
+  
+  .filter-button {
+    @apply px-3 sm:px-4 py-2 rounded-2xl text-xs sm:text-sm font-medium transition-all duration-300 ease-out;
+  }
+  
+  .filter-active {
+    @apply bg-sage-500 text-white shadow-soft;
+  }
+  
+  .filter-inactive {
+    @apply bg-cream-200 text-mist-600 hover:bg-cream-300;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}

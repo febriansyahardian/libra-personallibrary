@@ -1,0 +1,23 @@
+{
+  "name": "libra-personal-library",
+  "version": "1.0.0",
+  "description": "A minimalist personal library web app with 2025-style design",
+  "main": "public/index.html",
+  "scripts": {
+    "build": "tailwindcss -i ./src/input.css -o ./public/styles.css",
+    "build:css": "tailwindcss -i ./src/input.css -o ./public/styles.css --watch",
+    "vercel-build": "npm run build"
+  },
+  "keywords": [
+    "library",
+    "books",
+    "minimalist",
+    "web-app",
+    "vercel"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "tailwindcss": "^3.4.0"
+  }
+}

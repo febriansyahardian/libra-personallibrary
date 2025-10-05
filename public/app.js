@@ -55,10 +55,14 @@ class LibraLibrary {
     async loadBooks() {
         try {
             if (this.supabase) {
-                const { data, error } = await this.supabase
+                let query = this.supabase
                     .from('books')
                     .select('*')
                     .order('addedDate', { ascending: true });
+                if (this.userId) {
+                    query = query.eq('owner', this.userId);
+                }
+                const { data, error } = await query;
                 if (error) throw error;
                 this.books = Array.isArray(data) ? data : [];
                 return;
@@ -211,16 +215,16 @@ class LibraLibrary {
 
     async submitBook(bookData) {
         try {
-            // Create new book object
+            // Create new book object (let DB generate the id)
             const newBook = {
-                id: Date.now(),
                 title: bookData.title,
                 author: bookData.author,
                 cover: bookData.cover || `https://images.unsplash.com/photo-${Math.floor(Math.random() * 1000000)}?w=400&h=600&fit=crop`,
                 status: 'to-read',
                 genre: bookData.genre || 'General',
                 description: bookData.description || 'No description available.',
-                addedDate: new Date().toISOString().split('T')[0]
+                addedDate: new Date().toISOString().split('T')[0],
+                owner: this.userId || 'public'
             };
 
             // Remote first if available

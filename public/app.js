@@ -1,6 +1,8 @@
 class LibraLibrary {
     constructor() {
         this.books = [];
+        this.supabase = null;
+        this.userId = null;
         this.currentFilters = {
             status: 'all',
             genre: 'all',
@@ -10,20 +12,66 @@ class LibraLibrary {
     }
 
     async init() {
-        this.loadBooks();
+        // Initialize Supabase if configured
+        this.initSupabase();
+        await this.loadBooks();
+        this.initRealtime();
         this.setupEventListeners();
         this.renderBooks();
         this.updateCounts();
     }
 
-    loadBooks() {
+    initSupabase() {
         try {
-            // Load books from localStorage
+            const cfg = window.LIBRA_CONFIG || {};
+            if (window.supabase && cfg.supabaseUrl && cfg.supabaseAnonKey) {
+                this.supabase = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
+                this.userId = cfg.userId || null;
+            }
+        } catch (e) {
+            console.warn('Supabase init skipped:', e);
+        }
+    }
+
+    initRealtime() {
+        try {
+            if (!this.supabase) return;
+            // Subscribe to changes in the books table
+            this.supabase
+                .channel('books-changes')
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'books' }, (payload) => {
+                    // Simple strategy: re-fetch books on any change
+                    this.loadBooks().then(() => {
+                        this.renderBooks();
+                        this.updateCounts();
+                    });
+                })
+                .subscribe();
+        } catch (e) {
+            console.warn('Realtime init skipped:', e);
+        }
+    }
+
+    async loadBooks() {
+        try {
+            if (this.supabase) {
+                const { data, error } = await this.supabase
+                    .from('books')
+                    .select('*')
+                    .order('addedDate', { ascending: true });
+                if (error) throw error;
+                if (Array.isArray(data) && data.length > 0) {
+                    this.books = data;
+                    this.saveBooksLocal();
+                    return;
+                }
+            }
+
+            // Fallback: localStorage or seed sample
             const savedBooks = localStorage.getItem('libraBooks');
             if (savedBooks) {
                 this.books = JSON.parse(savedBooks);
             } else {
-                // Initialize with sample books if no data exists
                 this.books = [
                     {
                         id: 1,
@@ -76,7 +124,7 @@ class LibraLibrary {
                         addedDate: "2024-01-19"
                     }
                 ];
-                this.saveBooks();
+                this.saveBooksLocal();
             }
         } catch (error) {
             console.error('Error loading books:', error);
@@ -84,7 +132,7 @@ class LibraLibrary {
         }
     }
 
-    saveBooks() {
+    saveBooksLocal() {
         try {
             localStorage.setItem('libraBooks', JSON.stringify(this.books));
         } catch (error) {
@@ -241,11 +289,15 @@ class LibraLibrary {
                 addedDate: new Date().toISOString().split('T')[0]
             };
 
-            // Add to local array
+            // Remote first if available
+            if (this.supabase) {
+                const { error } = await this.supabase.from('books').insert(newBook);
+                if (error) throw error;
+            }
+
+            // Update local state and cache
             this.books.push(newBook);
-            
-            // Save to localStorage
-            this.saveBooks();
+            this.saveBooksLocal();
             
             // Update UI
             this.renderBooks();
@@ -281,8 +333,17 @@ class LibraLibrary {
             if (bookIndex !== -1) {
                 this.books[bookIndex].status = newStatus;
                 
-                // Save to localStorage
-                this.saveBooks();
+                // Remote update if available
+                if (this.supabase) {
+                    const { error } = await this.supabase
+                        .from('books')
+                        .update({ status: newStatus })
+                        .eq('id', bookId);
+                    if (error) throw error;
+                }
+
+                // Save locally
+                this.saveBooksLocal();
                 
                 // Update UI
                 this.renderBooks();
@@ -320,8 +381,17 @@ class LibraLibrary {
             // Remove from local array
             this.books = this.books.filter(book => book.id !== bookId);
             
-            // Save to localStorage
-            this.saveBooks();
+            // Remote delete if available
+            if (this.supabase) {
+                const { error } = await this.supabase
+                    .from('books')
+                    .delete()
+                    .eq('id', bookId);
+                if (error) throw error;
+            }
+
+            // Save locally
+            this.saveBooksLocal();
             
             // Update UI
             this.renderBooks();

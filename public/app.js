@@ -2,6 +2,8 @@ class LibraLibrary {
     constructor() {
         this.books = [];
         this.storageKey = 'libra_books';
+        this.supabase = null;
+        this.userId = null;
         this.currentFilters = {
             status: 'all',
             genre: 'all',
@@ -11,19 +13,40 @@ class LibraLibrary {
     }
 
     async init() {
+        this.initSupabase();
         await this.loadBooks();
         this.setupEventListeners();
         this.renderBooks();
         this.updateCounts();
     }
 
+    initSupabase() {
+        try {
+            const cfg = window.LIBRA_CONFIG || {};
+            if (window.supabase && cfg.supabaseUrl && cfg.supabaseAnonKey) {
+                this.supabase = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
+                this.userId = cfg.userId || null;
+            }
+        } catch (e) {
+            console.warn('Supabase init skipped:', e);
+        }
+    }
+
     async loadBooks() {
         try {
-            const raw = localStorage.getItem(this.storageKey);
-            const parsed = raw ? JSON.parse(raw) : [];
-            this.books = Array.isArray(parsed) ? parsed : [];
-            // Ensure ascending by addedDate
-            this.books.sort((a, b) => (a.addedDate || '').localeCompare(b.addedDate || ''));
+            if (this.supabase) {
+                const { data, error } = await this.supabase
+                    .from('books')
+                    .select('*')
+                    .order('addedDate', { ascending: true });
+                if (error) throw error;
+                this.books = Array.isArray(data) ? data : [];
+            } else {
+                const raw = localStorage.getItem(this.storageKey);
+                const parsed = raw ? JSON.parse(raw) : [];
+                this.books = Array.isArray(parsed) ? parsed : [];
+                this.books.sort((a, b) => (a.addedDate || '').localeCompare(b.addedDate || ''));
+            }
         } catch (error) {
             console.error('Error loading books:', error);
             this.showToast('Error loading books', 'error');
@@ -177,7 +200,7 @@ class LibraLibrary {
         try {
             // Create new book object with generated id
             const newBook = {
-                id: Date.now(),
+                id: this.supabase ? undefined : Date.now(),
                 title: bookData.title,
                 author: bookData.author,
                 cover: bookData.cover || `https://images.unsplash.com/photo-${Math.floor(Math.random() * 1000000)}?w=400&h=600&fit=crop`,
@@ -187,8 +210,15 @@ class LibraLibrary {
                 addedDate: new Date().toISOString().split('T')[0]
             };
 
-            this.books.push(newBook);
-            this.saveBooks();
+            if (this.supabase) {
+                const { data, error } = await this.supabase.from('books').insert(newBook).select();
+                if (error) throw error;
+                const inserted = Array.isArray(data) && data[0] ? data[0] : newBook;
+                this.books.push(inserted);
+            } else {
+                this.books.push(newBook);
+                this.saveBooks();
+            }
             
             // Update UI
             this.renderBooks();
@@ -223,8 +253,15 @@ class LibraLibrary {
             const bookIndex = this.books.findIndex(book => book.id === bookId);
             if (bookIndex !== -1) {
                 this.books[bookIndex].status = newStatus;
-
-                this.saveBooks();
+                if (this.supabase) {
+                    const { error } = await this.supabase
+                        .from('books')
+                        .update({ status: newStatus })
+                        .eq('id', bookId);
+                    if (error) throw error;
+                } else {
+                    this.saveBooks();
+                }
                 
                 // Update UI
                 this.renderBooks();
@@ -261,8 +298,15 @@ class LibraLibrary {
         try {
             // Remove from local array
             this.books = this.books.filter(book => book.id !== bookId);
-
-            this.saveBooks();
+            if (this.supabase) {
+                const { error } = await this.supabase
+                    .from('books')
+                    .delete()
+                    .eq('id', bookId);
+                if (error) throw error;
+            } else {
+                this.saveBooks();
+            }
             
             // Update UI
             this.renderBooks();

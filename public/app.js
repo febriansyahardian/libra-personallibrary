@@ -55,14 +55,10 @@ class LibraLibrary {
     async loadBooks() {
         try {
             if (this.supabase) {
-                let query = this.supabase
+                const { data, error } = await this.supabase
                     .from('books')
                     .select('*')
                     .order('addedDate', { ascending: true });
-                if (this.userId) {
-                    query = query.eq('owner', this.userId);
-                }
-                const { data, error } = await query;
                 if (error) throw error;
                 this.books = Array.isArray(data) ? data : [];
                 return;
@@ -223,8 +219,7 @@ class LibraLibrary {
                 status: 'to-read',
                 genre: bookData.genre || 'General',
                 description: bookData.description || 'No description available.',
-                addedDate: new Date().toISOString().split('T')[0],
-                owner: this.userId || 'public'
+                addedDate: new Date().toISOString().split('T')[0]
             };
 
             // Remote first if available

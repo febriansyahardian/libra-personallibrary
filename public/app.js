@@ -60,86 +60,20 @@ class LibraLibrary {
                     .select('*')
                     .order('addedDate', { ascending: true });
                 if (error) throw error;
-                if (Array.isArray(data) && data.length > 0) {
-                    this.books = data;
-                    this.saveBooksLocal();
-                    return;
-                }
+                this.books = Array.isArray(data) ? data : [];
+                return;
             }
 
-            // Fallback: localStorage or seed sample
-            const savedBooks = localStorage.getItem('libraBooks');
-            if (savedBooks) {
-                this.books = JSON.parse(savedBooks);
-            } else {
-                this.books = [
-                    {
-                        id: 1,
-                        title: "The Great Gatsby",
-                        author: "F. Scott Fitzgerald",
-                        genre: "Fiction",
-                        status: "to-read",
-                        cover: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=400&h=600&fit=crop",
-                        description: "A story of the fabulously wealthy Jay Gatsby and his love for the beautiful Daisy Buchanan.",
-                        addedDate: "2024-01-15"
-                    },
-                    {
-                        id: 2,
-                        title: "Atomic Habits",
-                        author: "James Clear",
-                        genre: "Self-Help",
-                        status: "to-read",
-                        cover: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop",
-                        description: "Learn how tiny changes in behavior can result in remarkable outcomes.",
-                        addedDate: "2024-01-16"
-                    },
-                    {
-                        id: 3,
-                        title: "Dune",
-                        author: "Frank Herbert",
-                        genre: "Science Fiction",
-                        status: "to-read",
-                        cover: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=600&fit=crop",
-                        description: "A science fiction novel about a desert planet and its valuable spice.",
-                        addedDate: "2024-01-17"
-                    },
-                    {
-                        id: 4,
-                        title: "Deep Work",
-                        author: "Cal Newport",
-                        genre: "Productivity",
-                        status: "to-read",
-                        cover: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400&h=600&fit=crop",
-                        description: "Rules for focused success in a distracted world.",
-                        addedDate: "2024-01-18"
-                    },
-                    {
-                        id: 5,
-                        title: "Sapiens",
-                        author: "Yuval Noah Harari",
-                        genre: "Non-Fiction",
-                        status: "to-read",
-                        cover: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop",
-                        description: "A brief history of humankind from ancient humans to the present.",
-                        addedDate: "2024-01-19"
-                    }
-                ];
-                this.saveBooksLocal();
-            }
+            // No Supabase configured: start empty (no localStorage fallback)
+            this.books = [];
+            console.warn('Supabase not configured. Data will not persist across sessions.');
         } catch (error) {
             console.error('Error loading books:', error);
             this.showToast('Error loading books', 'error');
         }
     }
 
-    saveBooksLocal() {
-        try {
-            localStorage.setItem('libraBooks', JSON.stringify(this.books));
-        } catch (error) {
-            console.error('Error saving books:', error);
-            this.showToast('Error saving books', 'error');
-        }
-    }
+    // Removed localStorage caching; persistence handled by Supabase
 
     setupEventListeners() {
         // Search functionality
@@ -291,13 +225,18 @@ class LibraLibrary {
 
             // Remote first if available
             if (this.supabase) {
-                const { error } = await this.supabase.from('books').insert(newBook);
+                const { data, error } = await this.supabase
+                    .from('books')
+                    .insert(newBook)
+                    .select();
                 if (error) throw error;
+                // Prefer server-returned row to avoid mismatch
+                const inserted = Array.isArray(data) && data[0] ? data[0] : newBook;
+                this.books.push(inserted);
+            } else {
+                // No persistence, still update UI state
+                this.books.push(newBook);
             }
-
-            // Update local state and cache
-            this.books.push(newBook);
-            this.saveBooksLocal();
             
             // Update UI
             this.renderBooks();
@@ -341,9 +280,7 @@ class LibraLibrary {
                         .eq('id', bookId);
                     if (error) throw error;
                 }
-
-                // Save locally
-                this.saveBooksLocal();
+                // No localStorage persistence
                 
                 // Update UI
                 this.renderBooks();
@@ -389,9 +326,7 @@ class LibraLibrary {
                     .eq('id', bookId);
                 if (error) throw error;
             }
-
-            // Save locally
-            this.saveBooksLocal();
+            // No localStorage persistence
             
             // Update UI
             this.renderBooks();
